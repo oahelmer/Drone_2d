@@ -5,7 +5,7 @@ import os
 
 verdi = 1 #er høyden til dronen
 referanse = 0.5 #ønsket høyde til drone
-verdi_x = 1.8 # er x posisjon
+verdi_x = 1 # er x posisjon
 referanse_x = 1
 
 t = 0
@@ -110,7 +110,7 @@ class System:
         self.velocity_y += self.acceleration_y * h
         self.y += self.velocity_y * h
 
-        self.IMAGE = pygame.transform.rotate(self.IMAGE, self.velocity_pitch)
+#        self.IMAGE = pygame.transform.rotate(self.IMAGE, self.velocity_pitch)
 
 
 
