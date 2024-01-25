@@ -6,7 +6,7 @@ import os
 verdi = 1 #er høyden til dronen
 referanse = 0.5 #ønsket høyde til drone
 verdi_x = 1 # er x posisjon
-referanse_x = 1
+referanse_x = 1.5
 
 t = 0
 FPS = 60
@@ -16,7 +16,8 @@ ki = 10
 kd = 60
 
 skalar = 0.3
-kp_pitch = 1 * skalar
+kp_pitch = 100 * skalar
+ki_pitch = 0 * skalar
 kd_pitch =  (4*kp_pitch+1/40) * skalar/2   #(4*kp_pitch+1/40) * skalar
 
 h = 1/FPS
@@ -128,7 +129,7 @@ def main():
     clock = pygame.time.Clock() 
 
     pid = PID(kp, ki, kd)
-    pid2 = PID(kp_pitch,0,kd_pitch)
+    pid2 = PID(kp_pitch,ki_pitch,kd_pitch)
     system = System(initial_y=verdi,initial_x= verdi_x, initial_velocity_y=0, initial_velocity_x=0, tyngde=2)
 
 
