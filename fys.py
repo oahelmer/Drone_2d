@@ -15,10 +15,10 @@ kp = 100
 ki = 10
 kd = 60
 
-skalar = 0.3
-kp_pitch = 100 * skalar
+skalar = 1
+kp_pitch = 1 * skalar
 ki_pitch = 0 * skalar
-kd_pitch =  (4*kp_pitch+1/40) * skalar/2   #(4*kp_pitch+1/40) * skalar
+kd_pitch =  (4*kp_pitch+1/40) * skalar
 
 h = 1/FPS
 g = 9.81
@@ -111,7 +111,7 @@ class System:
         self.velocity_y += self.acceleration_y * h
         self.y += self.velocity_y * h
 
-#        self.IMAGE = pygame.transform.rotate(self.IMAGE, self.velocity_pitch)
+#        self.IMAGE = pygame.transform.rotate(self.IMAGE, self.velocity_pitch*h)
 
 
 
