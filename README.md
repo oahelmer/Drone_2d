@@ -11,4 +11,6 @@ kreftene blir simulert av forward euler numerisk metode fordi den er enkelt impl
 
 Høyde regulatoren er en vanlig pid regulator med kp, ki og kd.
 posisjonsregulatoren er en kaskaderegulator av en PID for posisjon som setter referansen til en PD-regulator som kontrollerer pitchen.
-PD-regulatoren tar kun referanse input i intervallet [-,]
+PD-regulatoren tar kun referanse input i intervallet [-pitch_grense , pitch_grense] for å forhindre for stor pitch. 
+PD-regulatoren er designet med hensyn på en linearisert modell av det ulinjære systemet som tar utgangspunkt i at pitchen skal være lav.
+Så grensen medfører stabilitet.
