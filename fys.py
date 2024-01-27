@@ -148,21 +148,6 @@ def main():
 
     while(run):
         clock.tick(FPS)   # Controls Frames per seconds
-        
-  # get all events
-        ev = pygame.event.get()
-
-  # proceed events
-        for event in ev:
-
-    # handle MOUSEBUTTONUP
-            if event.type == pygame.MOUSEBUTTONUP:
-                referanse_x,referanse = pygame.mouse.get_pos()
-                referanse_x = referanse_x/1000
-                referanse = referanse/1000
-                pid.reset()
-                pid1.reset()
-                pid2.reset()
 
 
         pid.pid(t, referanse, system.y)
@@ -191,6 +176,14 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+            if event.type == pygame.MOUSEBUTTONUP:
+                referanse_x,referanse = pygame.mouse.get_pos()
+                referanse_x = referanse_x/1000
+                referanse = referanse/1000
+                pid.reset()
+                pid1.reset()
+                pid2.reset()
+
         draw_window(system)
         
         t = t + h
