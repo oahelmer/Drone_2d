@@ -3,6 +3,8 @@ from scipy.integrate import odeint
 import pygame
 import os
 
+Gamemode = "Keys" # "Keys" for arrows "Click" for mouseclick
+
 verdi = 1 #er høyden til dronen
 referanse = 0.5 #ønsket høyde til drone
 verdi_x = 1 # er x posisjon
@@ -176,13 +178,31 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.MOUSEBUTTONUP:
-                referanse_x,referanse = pygame.mouse.get_pos()
-                referanse_x = referanse_x/1000
-                referanse = referanse/1000
-                pid.reset()
-                pid1.reset()
-                pid2.reset()
+
+            if(Gamemode == "Click"):
+                if event.type == pygame.MOUSEBUTTONUP:
+                    referanse_x,referanse = pygame.mouse.get_pos()
+                    referanse_x = referanse_x/1000
+                    referanse = referanse/1000
+                    pid.reset()
+                    pid1.reset()
+                    pid2.reset()
+            elif(Gamemode == "Keys"):
+                pressed = pygame.key.get_pressed()
+                if pressed[pygame.K_UP]:
+                    referanse -= 0.1
+                    print("up is pressed")
+                if pressed[pygame.K_DOWN]:
+                    referanse += 0.1
+                    print("down is pressed")
+                if pressed[pygame.K_RIGHT]:
+                    referanse_x += 0.1
+                    print("right is pressed")
+                if pressed[pygame.K_LEFT]:
+                    referanse_x -= 0.1
+                    print("left is pressed")
+            else:
+                raise Exception("Sorry, Gamemode has to be Keys or Click")
 
         draw_window(system)
         
