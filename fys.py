@@ -6,7 +6,9 @@ import os
 verdi = 1 #er høyden til dronen
 referanse = 0.5 #ønsket høyde til drone
 verdi_x = 1 # er x posisjon
-referanse_x = 1.5
+referanse_x = 1.2
+referanse_pitch = 0 # opdateres av posisjonsregulatoren
+pitch_grense = 0.8 # radianer for hvor mye man tillater regilatoren å sette som referanse_pitch
 
 t = 0
 FPS = 60
@@ -18,7 +20,11 @@ kd = 60
 skalar = 1
 kp_pitch = 1 * skalar
 ki_pitch = 0 * skalar
-kd_pitch =  (4*kp_pitch+1/40) * skalar
+kd_pitch = (4*kp_pitch+1/40) * skalar
+
+kp_x = 100
+ki_x = 0
+kd_x = 0
 
 h = 1/FPS
 g = 9.81
@@ -129,6 +135,7 @@ def main():
     clock = pygame.time.Clock() 
 
     pid = PID(kp, ki, kd)
+    pid1 = PID(kp_x,ki_x,kd_x)
     pid2 = PID(kp_pitch,ki_pitch,kd_pitch)
     system = System(initial_y=verdi,initial_x= verdi_x, initial_velocity_y=0, initial_velocity_x=0, tyngde=2)
 
@@ -137,12 +144,23 @@ def main():
         clock.tick(FPS)   # Controls Frames per seconds
         
         pid.pid(t, referanse, system.y)
-        pid2.pid(t, referanse_x, system.x)
+        pid1.pid(t, referanse_x, system.x)
+        referanse_pitch = pid1.u
+        if(pitch_grense <= referanse_pitch):
+            referanse_pitch = pitch_grense
+        elif(referanse_pitch <= -pitch_grense):
+            referanse_pitch = -pitch_grense
+        pid2.pid(t, referanse_pitch, system.pitch)
 
         system.update(pid.u, pid2.u, h)
-        print("y:", system.y)
+#        print("y:", system.y)
         print("x:", system.x)
+#        print("x_velocity:", system.velocity_x)
+        print("x_acceleration:", system.acceleration_x)
         print("pitch:", system.pitch)
+        print("pid_x.e:", pid1.e)
+        print("pid_pitch.e:", pid2.e)
+        print("referanse_pitch:", referanse_pitch)
 
 
 
