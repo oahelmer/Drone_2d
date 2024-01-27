@@ -6,7 +6,7 @@ import os
 verdi = 1 #er høyden til dronen
 referanse = 0.5 #ønsket høyde til drone
 verdi_x = 1 # er x posisjon
-referanse_x = 1.2
+referanse_x = 2
 referanse_pitch = 0 # opdateres av posisjonsregulatoren
 pitch_grense = 0.8 # radianer for hvor mye man tillater regilatoren å sette som referanse_pitch
 
@@ -17,14 +17,14 @@ kp = 100
 ki = 10
 kd = 60
 
-skalar = 1
+skalar = 3
 kp_pitch = 1 * skalar
 ki_pitch = 0 * skalar
 kd_pitch = (4*kp_pitch+1/40) * skalar
 
-kp_x = 100
+kp_x = 3
 ki_x = 0
-kd_x = 0
+kd_x = 30
 
 h = 1/FPS
 g = 9.81
@@ -103,7 +103,7 @@ class System:
 
         self.acceleration_pitch = (Fl - Fr)/self.tyngde
         self.acceleration_y = (Fl + Fr)*np.cos(self.pitch)/self.tyngde
-        self.acceleration_x = (Fl + Fr)*np.sin(self.pitch)/self.tyngde
+        self.acceleration_x = (Fl + Fr + g*self.tyngde)*np.sin(self.pitch)/self.tyngde
 
 
 #_________FORWARD_EULER_____________________________________
@@ -153,13 +153,13 @@ def main():
         pid2.pid(t, referanse_pitch, system.pitch)
 
         system.update(pid.u, pid2.u, h)
-#        print("y:", system.y)
+        print("y:", system.y)
         print("x:", system.x)
-#        print("x_velocity:", system.velocity_x)
+        print("x_velocity:", system.velocity_x)
         print("x_acceleration:", system.acceleration_x)
         print("pitch:", system.pitch)
-        print("pid_x.e:", pid1.e)
-        print("pid_pitch.e:", pid2.e)
+#        print("pid_x.e:", pid1.e)
+#        print("pid_pitch.e:", pid2.e)
         print("referanse_pitch:", referanse_pitch)
 
 
