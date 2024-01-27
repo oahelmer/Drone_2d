@@ -22,9 +22,9 @@ kp_pitch = 1 * skalar
 ki_pitch = 0 * skalar
 kd_pitch = (4*kp_pitch+1/40) * skalar
 
-kp_x = 3
-ki_x = 0
-kd_x = 30
+kp_x = 1
+ki_x = 0.1
+kd_x = 40
 
 h = 1/FPS
 g = 9.81
@@ -79,6 +79,12 @@ class PID:
         # Setter pådraget med hensyn på PID leddene
         self.u = self.kp * self.e + self.ki * self.integral + self.kd * e_derivert
 
+    def reset(self):
+        self.e = 0
+        self.e_prev = 0
+        self.integral = 0
+        self.u = 0
+
 
 
 class System:
@@ -129,7 +135,7 @@ def draw_window(Player):
 
 
 def main():
-    global verdi, t, tyngde
+    global verdi, t, tyngde, referanse, referanse_x
 
     run = True
     clock = pygame.time.Clock() 
@@ -143,6 +149,22 @@ def main():
     while(run):
         clock.tick(FPS)   # Controls Frames per seconds
         
+  # get all events
+        ev = pygame.event.get()
+
+  # proceed events
+        for event in ev:
+
+    # handle MOUSEBUTTONUP
+            if event.type == pygame.MOUSEBUTTONUP:
+                referanse_x,referanse = pygame.mouse.get_pos()
+                referanse_x = referanse_x/1000
+                referanse = referanse/1000
+                pid.reset()
+                pid1.reset()
+                pid2.reset()
+
+
         pid.pid(t, referanse, system.y)
         pid1.pid(t, referanse_x, system.x)
         referanse_pitch = pid1.u
@@ -155,12 +177,14 @@ def main():
         system.update(pid.u, pid2.u, h)
         print("y:", system.y)
         print("x:", system.x)
-        print("x_velocity:", system.velocity_x)
-        print("x_acceleration:", system.acceleration_x)
-        print("pitch:", system.pitch)
+        print("x_ref", referanse_x)
+        print("y_ref", referanse)
+#        print("x_velocity:", system.velocity_x)
+#        print("x_acceleration:", system.acceleration_x)
+#        print("pitch:", system.pitch)
 #        print("pid_x.e:", pid1.e)
 #        print("pid_pitch.e:", pid2.e)
-        print("referanse_pitch:", referanse_pitch)
+#        print("referanse_pitch:", referanse_pitch)
 
 
 
